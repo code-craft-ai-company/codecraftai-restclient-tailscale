@@ -1,50 +1,65 @@
-=======================
-python-package-template
-=======================
-This is a template repository that can be used to quickly create a python package project.
+=====================================
+Automation Mojo RestClient - Tailscale
+=====================================
 
-=========================
-Features of this Template
-=========================
-* Machine Setup
-* Virtual Environment Setup (Poetry)
-* PyPi Publishing
+The ``automojo-restclient-tailscale`` package is a typed, aspect-driven REST client for the Tailscale public API (``api.tailscale.com/api/v2/``). It is built on top of ``automojo-restclient-base`` and consumes credentials from ``automojo-credentials`` (``TailscaleAuthKeyCredential``, ``TailscaleOAuthCredential``). The package implements the ``IVPNControlPlane`` Protocol declared in ``automojo-interfaces``, so any consumer that expects a control-plane today can substitute this client transparently.
 
-========================
-How to Use This Template
-========================
-- Click the 'Use this template' button
-- Fill in the information to create your repository
-- Checkout your new repository
-- Change the following in 'repository-config.ini'
+The status of this package is **scaffold and specs**. The implementation lands in Milestone M3b of the VPN/cloud-provisioning plan. See the ``specs/`` folder for the Kiro-style requirements, design, and task documentation that drives that work.
 
-  #. 'PROJECT NAME'
-  #. 'REPOSITORY_NAME'
+Highlights (planned)
+====================
 
-- If you have machine dependencies to add, put them in 'setup-ubuntu-machine'
-- Modify the pyproject.toml file with the correct package-name, author, publishing information, etc.
-- Rename the VSCODE workspace file 'mv workspaces/default-workspace.template workspaces/(project name).template'
-- Replace the README.rst file with your own README
-- Update the LICENSE.txt file with your copyright information and license.
-- Add your dependencies with python poetry 'poetry add (dependency name)'
-- Drop your package code in 'source/packages'
-- Modify the name of your package root in 'pyproject.toml'
+- ``TailscaleClient(RestClientBase)`` exposing api groups for ``devices``, ``keys``, ``acls``, ``tailnets``, ``dns``, and ``posture``.
+- ``IVPNControlPlane`` Protocol conformance: ``mint_authkey``, ``list_devices``, ``delete_device``, ``apply_acl``.
+- OAuth bearer-token lifecycle with lazy mint, caching, and 401-triggered single retry.
+- Optional OpenAPI-driven typed model generation under ``model/`` (re-evaluated per the codegen rule in the workspace-level ``PLAN-VPN-AND-CLOUD-PROVISIONING.md`` §9.2a — if generator output is not clean, the client is hand-authored instead).
+- Replaces the M3-landed ``automojo-interop/vpn/tailscale/tailscalecontrolplane.py``, which becomes a re-export shim for one release cycle after this package ships.
 
-  #. 'packages = [{include="(root folder name)", from="source/packages"}]'
+Repository Structure
+====================
 
+- ``development/`` - Runtime environment scripts.
+- ``repository-setup/`` - Repository homing and setup scripts.
+- ``source/packages/automojo/restclient/tailscale/`` - Package source code (lands in M3b).
+- ``source/testroots/testbase/automojo/tests/restclient/tailscale/`` - TestBase test roots (lands in M3b).
+- ``specs/`` - Requirements, design, and task documentation (Kiro-style).
+- ``userguide/`` - Standards, conventions, and documentation.
+
+Environment Setup
 =================
-Code Organization
-=================
-* .vscode - Common tasks
-* development - This is where the runtime environment scripts are located
-* repository-setup - Scripts for homing your repository and to your checkout and machine setup
-* userguide - Where you put your user guide
-* source/packages - Put your root folder here 'source/packages/(root-module-folder)'
-* workspaces - This is where you add VSCode workspaces templates and where workspaces show up when homed.
 
-==========
-References
-==========
+When working in a Codex container:
 
-- `User Guide <userguide/userguide.rst>`
-- `Coding Standards <userguide/10-00-coding-standards.rst>`
+.. code-block:: bash
+
+   ./development/setup-agent-container
+
+For local development:
+
+.. code-block:: bash
+
+   ./repository-setup/rehome-repository
+   ./development/setup-environment
+
+Running Tests
+=============
+
+Tests land in Milestone M3b. Once source code is in place:
+
+.. code-block:: bash
+
+   source .venv/bin/activate
+   PYTHONPATH=source/packages:source/testroots/testbase python -m pytest source/testroots -q
+
+Standards and Conventions
+=========================
+
+- Naming conventions: ``userguide/10-02-naming-conventions.rst``
+- Code organization: ``userguide/10-01-code-organization.rst``
+- Coding standards: ``userguide/10-00-coding-standards.rst``
+
+Additional Resources
+====================
+
+- User guide entry point: ``userguide/userguide.rst``
+- Codegen decision rule: workspace ``PLAN-VPN-AND-CLOUD-PROVISIONING.md`` §9.2a
