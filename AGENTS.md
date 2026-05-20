@@ -19,6 +19,31 @@ reusability and scalability over quick fixes and fast delivery.
 - Avoid using relative imports
 - Always prioritize the reuse of code from 'automojo-*' packages over rewriting functionality
 
+# Codegen Decision
+**This package uses OpenAPI code generation for the `model/` layer.** During the
+M3b implementation the upstream Tailscale OpenAPI document was fetched cleanly from
+`https://api.tailscale.com/api/v2?outputOpenapiSchema=true` (HTTP 200, OpenAPI
+3.1.0, 32 well-formed `components/schemas`). Per the §9.2a decision rule in
+`PLAN-VPN-AND-CLOUD-PROVISIONING.md` ("evaluate, then decide") the document was
+evaluated and found to translate cleanly into `SchemaObject`-shaped classes, so
+codegen was chosen over hand-authoring. The 29 object schemas are emitted as
+`SchemaObject` subclasses under `model/` by the maintainer-facing importer at
+`source/packages/automojo/restclient/tailscale/_codegen/import_openapi.py`.
+
+The generated `model/` files carry a `DO NOT EDIT BY HAND` header and are checked
+in (CI does not regenerate). The checked-in upstream document lives under `_spec/`
+with a SHA-256 sidecar. Regenerate after an upstream change with:
+
+```
+python -m automojo.restclient.tailscale._codegen.import_openapi
+```
+
+The client class hierarchy (`tailscaleclient.py`, `apigroups/*`), the OAuth glue
+(`oauthbearer.py`), and the aspects (`aspectstailscale.py`) are hand-authored on
+top of `automojo-restclient-base` — only the typed payloads are generated. If the
+upstream document ever stops importing cleanly, fall back to hand-authoring the
+`model/` classes per the §9.2a rule.
+
 # Project Overview
 The `automojo-restclient-tailscale` package is a typed, aspect-driven REST client for
 the Tailscale public API (`api.tailscale.com/api/v2/`). It is built on top of
