@@ -23,8 +23,10 @@ from typing import Any, Dict, List, Optional, Union
 from requests import Response, Session
 
 from automojo.errors.exceptions import (
-    ConfigurationError, HttpForbiddenError, SemanticError
+    ConfigurationError, SemanticError
 )
+
+from automojo.restclient.tailscale.exceptions import TailscaleAuthError
 
 from automojo.credentials.basecredential import BaseCredential
 from automojo.credentials.tailscaleauthkeycredential import TailscaleAuthKeyCredential
@@ -207,7 +209,7 @@ class TailscaleClient(RestClientBase):
             The call attaches the resolved bearer token, serializes
             ``json_body`` as raw JSON, and implements the
             mint-once-then-retry behaviour on a 401 response. A second 401
-            raises :class:`HttpForbiddenError` without looping.
+            raises :class:`TailscaleAuthError` without looping.
 
             :param method: HTTP method to invoke.
             :param leaf: API leaf path beginning with ``/``.
@@ -218,7 +220,7 @@ class TailscaleClient(RestClientBase):
 
             :returns: The :class:`Response` object from the call.
 
-            :raises: :class:`HttpForbiddenError` when a 401 persists after a
+            :raises: :class:`TailscaleAuthError` when a 401 persists after a
                 single re-mint and retry.
         """
         attempt = 0
@@ -239,10 +241,13 @@ class TailscaleClient(RestClientBase):
                                  "a bearer re-mint."]
                 err_msg_lines.append("METHOD: {}".format(method))
                 err_msg_lines.append("LEAF: {}".format(leaf))
+                err_msg_lines.append("STATUS: {}".format(response.status_code))
                 err_msg_lines.append("RESPONSE:")
                 err_msg_lines.append(response.text)
                 err_msg = os.linesep.join(err_msg_lines)
-                raise HttpForbiddenError(err_msg)
+                raise TailscaleAuthError(err_msg,
+                                         status_code=response.status_code,
+                                         response_body=response.text)
 
             attempt = attempt + 1
 
