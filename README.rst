@@ -4,7 +4,18 @@ Automation Mojo RestClient - Tailscale
 
 The ``automojo-restclient-tailscale`` package is a typed, aspect-driven REST client for the Tailscale public API (``api.tailscale.com/api/v2/``). It is built on top of ``automojo-restclient-base`` and consumes credentials from ``automojo-credentials`` (``TailscaleAuthKeyCredential``, ``TailscaleOAuthCredential``). The package implements the ``IVPNControlPlane`` Protocol declared in ``automojo-interfaces``, so any consumer that expects a control-plane today can substitute this client transparently.
 
-The status of this package is **scaffold and specs**. The implementation lands in Milestone M3b of the VPN/cloud-provisioning plan. See the ``specs/`` folder for the Kiro-style requirements, design, and task documentation that drives that work.
+The implementation landed in Milestone M3b of the VPN/cloud-provisioning plan. See the ``specs/`` folder for the Kiro-style requirements, design, and task documentation that drove that work.
+
+Regenerating the OpenAPI Models
+===============================
+
+The typed model classes under ``source/packages/automojo/restclient/tailscale/model/`` are generated from the official Tailscale OpenAPI document. They are checked in and carry a ``DO NOT EDIT BY HAND`` header. To re-sync them after an upstream API change:
+
+.. code-block:: bash
+
+   PYTHONPATH=source/packages python -m automojo.restclient.tailscale._codegen.import_openapi
+
+The importer fetches the document, validates it is OpenAPI 3.x, refreshes ``_spec/openapi.json`` plus its SHA-256 sidecar, and regenerates every ``model/*.py`` file.
 
 Highlights (planned)
 ====================
