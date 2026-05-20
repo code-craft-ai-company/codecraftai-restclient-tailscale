@@ -20,6 +20,11 @@ import requests_mock as rm_module
 
 from automojo.errors.exceptions import SemanticError
 
+from automojo.restclient.tailscale.exceptions import (
+    TailscaleApiError, TailscaleAuthError, TailscaleNotFoundError,
+    TailscaleRateLimitError, TailscaleServerError
+)
+
 from automojo.restclient.tailscale.model.tailscaledevice import TailscaleDevice
 from automojo.restclient.tailscale.model.tailscalekey import TailscaleKey
 
@@ -97,14 +102,75 @@ def test_devices_delete_treats_404_as_success():
 
 def test_devices_delete_raises_on_500():
     """
-        ``devices.delete`` raises on a non-2xx, non-404 response.
+        ``devices.delete`` raises a typed :class:`TailscaleServerError` on a
+        non-2xx, non-404 response.
     """
     client = make_authkey_client()
     with rm_module.Mocker() as mock:
         mock.delete("{}/api/v2/device/d1".format(BASE), status_code=500,
                     text="boom")
-        with pytest.raises(SemanticError):
+        with pytest.raises(TailscaleServerError) as excinfo:
             client.devices.delete(device_id="d1")
+        assert excinfo.value.status_code == 500
+        assert "boom" in excinfo.value.response_body
+    return
+
+
+def test_devices_list_403_raises_auth_error():
+    """
+        ``devices.list`` reclassifies a 403 into a :class:`TailscaleAuthError`.
+    """
+    client = make_authkey_client()
+    with rm_module.Mocker() as mock:
+        mock.get("{}{}/devices".format(BASE, TNET), status_code=403,
+                 text='{"message":"forbidden"}')
+        with pytest.raises(TailscaleAuthError) as excinfo:
+            client.devices.list()
+        assert excinfo.value.status_code == 403
+        assert "forbidden" in excinfo.value.response_body
+        assert isinstance(excinfo.value, TailscaleApiError)
+    return
+
+
+def test_devices_list_401_raises_auth_error():
+    """
+        ``devices.list`` reclassifies a 401 into a :class:`TailscaleAuthError`.
+    """
+    client = make_authkey_client()
+    with rm_module.Mocker() as mock:
+        mock.get("{}{}/devices".format(BASE, TNET), status_code=401,
+                 text="unauthorized")
+        with pytest.raises(TailscaleAuthError):
+            client.devices.list()
+    return
+
+
+def test_keys_get_404_raises_not_found_error():
+    """
+        ``keys.get`` reclassifies a 404 into a :class:`TailscaleNotFoundError`.
+    """
+    client = make_authkey_client()
+    with rm_module.Mocker() as mock:
+        mock.get("{}{}/keys/missing".format(BASE, TNET), status_code=404,
+                 text="not found")
+        with pytest.raises(TailscaleNotFoundError) as excinfo:
+            client.keys.get(key_id="missing")
+        assert excinfo.value.status_code == 404
+    return
+
+
+def test_devices_list_429_raises_rate_limit_error():
+    """
+        ``devices.list`` reclassifies a 429 into a
+        :class:`TailscaleRateLimitError`.
+    """
+    client = make_authkey_client()
+    with rm_module.Mocker() as mock:
+        mock.get("{}{}/devices".format(BASE, TNET), status_code=429,
+                 text="slow down")
+        with pytest.raises(TailscaleRateLimitError) as excinfo:
+            client.devices.list()
+        assert excinfo.value.status_code == 429
     return
 
 

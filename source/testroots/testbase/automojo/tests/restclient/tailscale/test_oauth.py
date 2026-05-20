@@ -17,6 +17,8 @@ import requests_mock as rm_module
 
 from automojo.errors.exceptions import HttpForbiddenError
 
+from automojo.restclient.tailscale.exceptions import TailscaleAuthError
+
 from automojo.restclient.tailscale.oauthbearer import OAuthBearer
 
 from automojo.tests.restclient.tailscale.testsupport import (
@@ -120,7 +122,7 @@ def test_oauth_401_triggers_single_remint_and_retry():
 
 def test_oauth_double_401_raises_forbidden():
     """
-        A second 401 after re-mint raises :class:`HttpForbiddenError`
+        A second 401 after re-mint raises a typed :class:`TailscaleAuthError`
         without looping.
     """
     client = make_oauth_client()
@@ -128,8 +130,10 @@ def test_oauth_double_401_raises_forbidden():
         mock.post(TOKEN_URL, json={"access_token": "tok", "expires_in": 3600})
         mock.get(DEVICES_URL, status_code=401, text="still unauthorized")
 
-        with pytest.raises(HttpForbiddenError):
+        with pytest.raises(TailscaleAuthError) as excinfo:
             client.devices.list()
+        assert excinfo.value.status_code == 401
+        assert "still unauthorized" in excinfo.value.response_body
 
         device_calls = [req for req in mock.request_history
                         if req.url.startswith(DEVICES_URL)]
