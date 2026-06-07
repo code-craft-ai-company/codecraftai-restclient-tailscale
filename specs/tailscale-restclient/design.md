@@ -6,9 +6,9 @@
 typed Python methods grouped by domain. The class hierarchy follows the
 `apigroups/*Group` pattern landed during the M1 `restapigroup-enhancements` work.
 
-The client implements `IVPNControlPlane` from `automojo-interfaces`. Once this
-package is published, the M3-landed `automojo-interop/vpn/tailscale/tailscalecontrolplane.py`
-will be reduced to a one-line `from automojo.restclient.tailscale import TailscaleClient as TailscaleControlPlane`
+The client implements `IVPNControlPlane` from `codecraftai-interfaces`. Once this
+package is published, the M3-landed `codecraftai-interop/vpn/tailscale/tailscalecontrolplane.py`
+will be reduced to a one-line `from ccai.restclient.tailscale import TailscaleClient as TailscaleControlPlane`
 with a `DeprecationWarning`.
 
 ## Architecture
@@ -46,7 +46,7 @@ provider-neutral; the group surface is faithful to the upstream API.
 ## Module Layout
 
 ```
-source/packages/automojo/restclient/tailscale/
+source/packages/ccai/restclient/tailscale/
   __init__.py                # re-exports TailscaleClient
   tailscaleclient.py         # the class
   aspectstailscale.py        # AspectsTailscale + DEFAULT_TAILSCALE_ASPECTS
@@ -68,10 +68,10 @@ source/packages/automojo/restclient/tailscale/
 ## See Also
 
 - [tailscale-openapi-import](../tailscale-openapi-import/design.md)
-- `automojo-interfaces/specs/vpn-control-plane-protocol/`
-- `automojo-restclient-base/specs/restapigroup-enhancements/`
-- `automojo-credentials/specs/tailscale-credentials/`
-- Future shim location: `automojo-interop/vpn/tailscale/tailscalecontrolplane.py` (post-M3b)
+- `codecraftai-interfaces/specs/vpn-control-plane-protocol/`
+- `codecraftai-restclient-base/specs/restapigroup-enhancements/`
+- `codecraftai-credentials/specs/tailscale-credentials/`
+- Future shim location: `codecraftai-interop/vpn/tailscale/tailscalecontrolplane.py` (post-M3b)
 
 ## Testing Strategy
 

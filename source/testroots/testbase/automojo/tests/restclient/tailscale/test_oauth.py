@@ -8,20 +8,20 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2025, Automation Mojo LLC"
+__copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
 import pytest
 import requests_mock as rm_module
 
-from automojo.errors.exceptions import HttpForbiddenError
+from ccai.errors.exceptions import HttpForbiddenError
 
-from automojo.restclient.tailscale.exceptions import TailscaleAuthError
+from ccai.restclient.tailscale.exceptions import TailscaleAuthError
 
-from automojo.restclient.tailscale.oauthbearer import OAuthBearer
+from ccai.restclient.tailscale.oauthbearer import OAuthBearer
 
-from automojo.tests.restclient.tailscale.testsupport import (
+from ccai.tests.restclient.tailscale.testsupport import (
     TEST_HOST, TEST_TAILNET, make_oauth_client
 )
 

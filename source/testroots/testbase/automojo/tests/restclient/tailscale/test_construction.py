@@ -8,27 +8,27 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2025, Automation Mojo LLC"
+__copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
 import pytest
 
-from automojo.errors.exceptions import ConfigurationError
+from ccai.errors.exceptions import ConfigurationError
 
-from automojo.credentials.basiccredential import BasicCredential
+from ccai.credentials.basiccredential import BasicCredential
 
-from automojo.interfaces.ivpncontrolplane import IVPNControlPlane
+from ccai.interfaces.ivpncontrolplane import IVPNControlPlane
 
-from automojo.restclient.tailscale.tailscaleclient import TailscaleClient
-from automojo.restclient.tailscale.apigroups.devicesgroup import DevicesGroup
-from automojo.restclient.tailscale.apigroups.keysgroup import KeysGroup
-from automojo.restclient.tailscale.apigroups.aclsgroup import AclsGroup
-from automojo.restclient.tailscale.apigroups.tailnetsgroup import TailnetsGroup
-from automojo.restclient.tailscale.apigroups.dnsgroup import DnsGroup
-from automojo.restclient.tailscale.apigroups.posturegroup import PostureGroup
+from ccai.restclient.tailscale.tailscaleclient import TailscaleClient
+from ccai.restclient.tailscale.apigroups.devicesgroup import DevicesGroup
+from ccai.restclient.tailscale.apigroups.keysgroup import KeysGroup
+from ccai.restclient.tailscale.apigroups.aclsgroup import AclsGroup
+from ccai.restclient.tailscale.apigroups.tailnetsgroup import TailnetsGroup
+from ccai.restclient.tailscale.apigroups.dnsgroup import DnsGroup
+from ccai.restclient.tailscale.apigroups.posturegroup import PostureGroup
 
-from automojo.tests.restclient.tailscale.testsupport import (
+from ccai.tests.restclient.tailscale.testsupport import (
     make_authkey_client, make_oauth_client
 )
 

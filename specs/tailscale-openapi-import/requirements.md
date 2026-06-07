@@ -4,8 +4,8 @@
 
 The `tailscale-openapi-import` feature pulls the official Tailscale OpenAPI document
 from the Tailscale public docs site and converts it into typed Python model classes
-under `source/packages/automojo/restclient/tailscale/model/`. The generated models are
-`SchemaObject`-shaped per the `automojo-restclient-base` pattern so they integrate
+under `source/packages/ccai/restclient/tailscale/model/`. The generated models are
+`SchemaObject`-shaped per the `codecraftai-restclient-base` pattern so they integrate
 cleanly with the rest of the package. The import is rerun whenever Tailscale ships a
 breaking change; the generated output is checked in (not regenerated at install time).
 
@@ -27,7 +27,7 @@ mechanical.
 
 1. WHEN the maintainer invokes the import script with no arguments THE SYSTEM SHALL
    fetch the OpenAPI document from the Tailscale-published URL and save it under
-   `source/packages/automojo/restclient/tailscale/_spec/openapi.json`.
+   `source/packages/ccai/restclient/tailscale/_spec/openapi.json`.
 2. WHEN the upstream URL returns a non-200 status THE SYSTEM SHALL raise a
    `ConfigurationError` with the URL and status code in the message and SHALL NOT
    overwrite the existing checked-in spec.
@@ -54,7 +54,7 @@ round-trippable.
    a default. IF the field is not required THEN THE SYSTEM SHALL emit the field with
    `Optional[T] = None`.
 4. THE SYSTEM SHALL emit each generated class as a `SchemaObject` subclass per the
-   `automojo-restclient-base` pattern, with `to_dict()` / `from_dict(d)` methods
+   `codecraftai-restclient-base` pattern, with `to_dict()` / `from_dict(d)` methods
    verified by round-trip property tests.
 
 ### Requirement 3: Round-Trip Property
