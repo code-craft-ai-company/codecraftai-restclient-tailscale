@@ -2,7 +2,7 @@
 
 ## Codegen Module
 
-- [x] 1. Create `source/packages/automojo/restclient/tailscale/_codegen/__init__.py`
+- [x] 1. Create `source/packages/ccai/restclient/tailscale/_codegen/__init__.py`
 - [x] 2. Implement `_codegen/typemap.py` — OpenAPI type/format → Python type with `date-time` → `datetime`
 - [x] 3. Implement `_codegen/emitter.py` — walks `components/schemas/*`, emits one `SchemaObject` subclass per schema
 - [x] 4. Implement `_codegen/import_openapi.py` — fetches + validates + invokes emitter

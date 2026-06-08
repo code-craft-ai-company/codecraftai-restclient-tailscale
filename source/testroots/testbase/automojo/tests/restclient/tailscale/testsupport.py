@@ -8,14 +8,14 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2025, Automation Mojo LLC"
+__copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
-from automojo.credentials.tailscaleauthkeycredential import TailscaleAuthKeyCredential
-from automojo.credentials.tailscaleoauthcredential import TailscaleOAuthCredential
+from ccai.credentials.tailscaleauthkeycredential import TailscaleAuthKeyCredential
+from ccai.credentials.tailscaleoauthcredential import TailscaleOAuthCredential
 
-from automojo.restclient.tailscale.tailscaleclient import TailscaleClient
+from ccai.restclient.tailscale.tailscaleclient import TailscaleClient
 
 
 TEST_HOST = "api.tailscale.test"

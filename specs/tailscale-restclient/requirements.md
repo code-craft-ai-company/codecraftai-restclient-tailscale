@@ -3,11 +3,11 @@
 ## Introduction
 
 The `tailscale-restclient` feature is the public face of the
-`automojo-restclient-tailscale` package: a `RestClientBase` subclass that exposes
+`codecraftai-restclient-tailscale` package: a `RestClientBase` subclass that exposes
 Tailscale's `api.tailscale.com/api/v2/` endpoints through typed Python methods. It
 consumes the generated models from `tailscale-openapi-import`. It implements the
-`IVPNControlPlane` Protocol from `automojo-interfaces` so consumers (notably the
-M3 control-plane shim in `automojo-interop/vpn/tailscale/`) can substitute it
+`IVPNControlPlane` Protocol from `codecraftai-interfaces` so consumers (notably the
+M3 control-plane shim in `codecraftai-interop/vpn/tailscale/`) can substitute it
 transparently.
 
 ---

@@ -9,7 +9,7 @@
 """
 
 __author__ = "Myron Walker"
-__copyright__ = "Copyright 2025, Automation Mojo LLC"
+__copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
@@ -17,17 +17,17 @@ import importlib
 
 import pytest
 
-from automojo.errors.exceptions import SemanticError
+from ccai.errors.exceptions import SemanticError
 
-from automojo.restclient.tailscale._codegen.emitter import (
+from ccai.restclient.tailscale._codegen.emitter import (
     class_name_for_schema, emit_all_schemas, emit_schema_module
 )
-from automojo.restclient.tailscale._codegen.typemap import python_type_for_schema
-from automojo.restclient.tailscale._codegen.import_openapi import (
+from ccai.restclient.tailscale._codegen.typemap import python_type_for_schema
+from ccai.restclient.tailscale._codegen.import_openapi import (
     validate_openapi_document
 )
 
-import automojo.restclient.tailscale.model as model_pkg
+import ccai.restclient.tailscale.model as model_pkg
 
 
 FIXTURE_SCHEMA = {
@@ -159,6 +159,6 @@ def test_generated_device_module_has_do_not_edit_header():
         The generated device module carries the DO NOT EDIT header.
     """
     module = importlib.import_module(
-        "automojo.restclient.tailscale.model.tailscaledevice")
+        "ccai.restclient.tailscale.model.tailscaledevice")
     assert "DO NOT EDIT BY HAND" in module.__doc__
     return

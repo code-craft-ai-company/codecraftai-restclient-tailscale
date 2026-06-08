@@ -4,13 +4,13 @@
 
 The `tailscale-openapi-import` feature is realised as a maintainer-facing import
 script plus generated output. The script lives at
-`source/packages/automojo/restclient/tailscale/_codegen/import_openapi.py` and is
+`source/packages/ccai/restclient/tailscale/_codegen/import_openapi.py` and is
 invoked by hand when the upstream Tailscale OpenAPI document changes. The script:
 
 1. Fetches the OpenAPI document via HTTPS GET.
 2. Validates it against OpenAPI 3.x.
 3. Walks every `components/schemas/<Name>` entry and emits one Python file per schema
-   under `source/packages/automojo/restclient/tailscale/model/`.
+   under `source/packages/ccai/restclient/tailscale/model/`.
 4. Emits an `__init__.py` re-exporting every generated class.
 
 Generated output is **checked in**. CI does not regenerate. This is deliberate: the
@@ -22,7 +22,7 @@ checking it in lets reviewers see API drift in PR diffs.
 ```
 ┌──────────────────────────────────────────────────────────┐
 │ Maintainer                                                │
-│   $ python -m automojo.restclient.tailscale._codegen.import_openapi
+│   $ python -m ccai.restclient.tailscale._codegen.import_openapi
 │                                                           │
 │   ┌─────────────────────────────────────────────────┐    │
 │   │ Fetcher (requests.get)                          │    │
@@ -43,14 +43,14 @@ checking it in lets reviewers see API drift in PR diffs.
 
 ## Data Model
 
-Each emitted class is a `SchemaObject` subclass (from `automojo.restclient.base.schemaobject`):
+Each emitted class is a `SchemaObject` subclass (from `ccai.restclient.base.schemaobject`):
 
 ```python
 class TailscaleDevice(SchemaObject):
     """
         Auto-generated from Tailscale OpenAPI schema `Device`.
 
-        DO NOT EDIT BY HAND. Run `python -m automojo.restclient.tailscale._codegen.import_openapi`
+        DO NOT EDIT BY HAND. Run `python -m ccai.restclient.tailscale._codegen.import_openapi`
         to regenerate.
     """
 
@@ -68,7 +68,7 @@ upstream schema snippet in a module-level constant so CI can detect manual edits
 ## Module Layout
 
 ```
-source/packages/automojo/restclient/tailscale/
+source/packages/ccai/restclient/tailscale/
   _spec/
     openapi.json          # checked-in upstream document
     openapi.sha256        # checksum
@@ -86,7 +86,7 @@ source/packages/automojo/restclient/tailscale/
 ## See Also
 
 - [tailscale-restclient](../tailscale-restclient/design.md)
-- `automojo-restclient-base` — `SchemaObject`, `SchemaField`
+- `codecraftai-restclient-base` — `SchemaObject`, `SchemaField`
 
 ## Testing Strategy
 
