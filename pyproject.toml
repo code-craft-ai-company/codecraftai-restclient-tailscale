@@ -2,12 +2,12 @@
 name = "codecraftai-restclient-tailscale"
 description = "Code Craft AI - Tailscale REST Client"
 version = "0.0.1"
-authors = []
+authors = ["Myron Walker <myron.walker@gmail.com>"]
 readme = "README.rst"
-license = "LICENSE.txt"
+license = "LicenseRef-CodeCraftAI-Dual-License"
 classifiers = [
     "Programming Language :: Python :: 3",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: POSIX"
 ]
 keywords = [
@@ -23,6 +23,7 @@ packages = [{include="ccai", from="source/packages"}]
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
 requests = "^2.32.5"
+pyyaml = "^6.0.2"
 codecraftai-errors = { git = "https://github.com/automationmojo/codecraftai-errors.git", branch = "main" }
 codecraftai-interfaces = { git = "https://github.com/automationmojo/codecraftai-interfaces.git", branch = "main" }
 codecraftai-credentials = { git = "https://github.com/automationmojo/codecraftai-credentials.git", branch = "main" }
