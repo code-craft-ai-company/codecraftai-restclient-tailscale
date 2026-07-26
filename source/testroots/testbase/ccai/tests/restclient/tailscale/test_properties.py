@@ -17,7 +17,8 @@ from typing import List, Optional
 
 import requests_mock as rm_module
 
-from hypothesis import given, settings, strategies as st
+from ccai.testbase.properties import given
+from ccai.testbase.properties import strategies as st
 
 from ccai.restclient.tailscale.oauthbearer import OAuthBearer
 from ccai.restclient.tailscale.model.tailscaledevice import TailscaleDevice
@@ -37,8 +38,7 @@ device_id_strategy = st.text(
     min_size=1, max_size=24)
 
 
-@settings(max_examples=100)
-@given(device_id=device_id_strategy)
+@given(device_id=device_id_strategy, constraints={"max_examples": 100})
 def test_property_device_url_composition_is_total(device_id: str):
     """
         For any valid device id, the per-device leaf is well-formed: it
@@ -53,8 +53,8 @@ def test_property_device_url_composition_is_total(device_id: str):
     return
 
 
-@settings(max_examples=100)
-@given(device_id=device_id_strategy,
+@given(
+    constraints={"max_examples": 100},device_id=device_id_strategy,
        subpath=st.sampled_from(["authorized", "tags", "key"]))
 def test_property_nested_device_url_composition_is_total(device_id: str,
                                                          subpath: str):
@@ -68,8 +68,7 @@ def test_property_nested_device_url_composition_is_total(device_id: str,
     return
 
 
-@settings(max_examples=50)
-@given(record_count=st.integers(min_value=0, max_value=60))
+@given(record_count=st.integers(min_value=0, max_value=60), constraints={"max_examples": 50})
 def test_property_iter_visits_every_record_once(record_count: int):
     """
         For any device count, ``devices.iter`` yields exactly that many
@@ -90,8 +89,8 @@ def test_property_iter_visits_every_record_once(record_count: int):
     return
 
 
-@settings(max_examples=50)
-@given(page_sizes=st.lists(st.integers(min_value=0, max_value=8),
+@given(
+    constraints={"max_examples": 50},page_sizes=st.lists(st.integers(min_value=0, max_value=8),
                            min_size=1, max_size=8))
 def test_property_cursor_paging_visits_every_record_once(page_sizes: List[int]):
     """
@@ -130,8 +129,8 @@ def test_property_cursor_paging_visits_every_record_once(page_sizes: List[int]):
     return
 
 
-@settings(max_examples=80)
-@given(events=st.lists(
+@given(
+    constraints={"max_examples": 80},events=st.lists(
     st.tuples(st.integers(min_value=0, max_value=10000),
               st.booleans()),
     min_size=1, max_size=20))
@@ -183,8 +182,7 @@ device_dict_strategy = st.fixed_dictionaries({
 })
 
 
-@settings(max_examples=100)
-@given(data=device_dict_strategy)
+@given(data=device_dict_strategy, constraints={"max_examples": 100})
 def test_property_generated_model_roundtrip(data):
     """
         For any populated device dict, ``from_dict(to_dict(x)) == x`` holds

@@ -31,7 +31,6 @@ codecraftai-restclient-base = { git = "https://github.com/automationmojo/codecra
 codecraftai-testbase = { git = "https://github.com/automationmojo/codecraftai-testbase.git", branch = "main" }
 
 [tool.poetry.group.dev.dependencies]
-hypothesis = ">=6.0.0"
 pytest = ">=8.0.0"
 requests-mock = ">=1.11.0"
 
