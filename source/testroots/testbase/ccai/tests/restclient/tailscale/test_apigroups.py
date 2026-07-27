@@ -13,9 +13,11 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
+from ccai import testbase
+
+
 import json
 
-import pytest
 import requests_mock as rm_module
 
 from ccai.errors.exceptions import SemanticError
@@ -109,7 +111,7 @@ def test_devices_delete_raises_on_500():
     with rm_module.Mocker() as mock:
         mock.delete("{}/api/v2/device/d1".format(BASE), status_code=500,
                     text="boom")
-        with pytest.raises(TailscaleServerError) as excinfo:
+        with testbase.raises(TailscaleServerError) as excinfo:
             client.devices.delete(device_id="d1")
         assert excinfo.value.status_code == 500
         assert "boom" in excinfo.value.response_body
@@ -124,7 +126,7 @@ def test_devices_list_403_raises_auth_error():
     with rm_module.Mocker() as mock:
         mock.get("{}{}/devices".format(BASE, TNET), status_code=403,
                  text='{"message":"forbidden"}')
-        with pytest.raises(TailscaleAuthError) as excinfo:
+        with testbase.raises(TailscaleAuthError) as excinfo:
             client.devices.list()
         assert excinfo.value.status_code == 403
         assert "forbidden" in excinfo.value.response_body
@@ -140,7 +142,7 @@ def test_devices_list_401_raises_auth_error():
     with rm_module.Mocker() as mock:
         mock.get("{}{}/devices".format(BASE, TNET), status_code=401,
                  text="unauthorized")
-        with pytest.raises(TailscaleAuthError):
+        with testbase.raises(TailscaleAuthError):
             client.devices.list()
     return
 
@@ -153,7 +155,7 @@ def test_keys_get_404_raises_not_found_error():
     with rm_module.Mocker() as mock:
         mock.get("{}{}/keys/missing".format(BASE, TNET), status_code=404,
                  text="not found")
-        with pytest.raises(TailscaleNotFoundError) as excinfo:
+        with testbase.raises(TailscaleNotFoundError) as excinfo:
             client.keys.get(key_id="missing")
         assert excinfo.value.status_code == 404
     return
@@ -168,7 +170,7 @@ def test_devices_list_429_raises_rate_limit_error():
     with rm_module.Mocker() as mock:
         mock.get("{}{}/devices".format(BASE, TNET), status_code=429,
                  text="slow down")
-        with pytest.raises(TailscaleRateLimitError) as excinfo:
+        with testbase.raises(TailscaleRateLimitError) as excinfo:
             client.devices.list()
         assert excinfo.value.status_code == 429
     return
@@ -179,7 +181,7 @@ def test_devices_delete_empty_id_raises():
         ``devices.delete`` rejects an empty device id.
     """
     client = make_authkey_client()
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         client.devices.delete(device_id="")
     return
 
@@ -295,7 +297,7 @@ def test_keys_mint_rejects_non_positive_ttl():
         ``keys.mint`` rejects a non-positive TTL.
     """
     client = make_authkey_client()
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         client.keys.mint(reusable=False, ephemeral=True, tags=[],
                           ttl_seconds=0)
     return

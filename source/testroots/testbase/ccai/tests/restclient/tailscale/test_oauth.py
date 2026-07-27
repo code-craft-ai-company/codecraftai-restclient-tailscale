@@ -12,7 +12,9 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
-import pytest
+from ccai import testbase
+
+
 import requests_mock as rm_module
 
 from ccai.errors.exceptions import HttpForbiddenError
@@ -130,7 +132,7 @@ def test_oauth_double_401_raises_forbidden():
         mock.post(TOKEN_URL, json={"access_token": "tok", "expires_in": 3600})
         mock.get(DEVICES_URL, status_code=401, text="still unauthorized")
 
-        with pytest.raises(TailscaleAuthError) as excinfo:
+        with testbase.raises(TailscaleAuthError) as excinfo:
             client.devices.list()
         assert excinfo.value.status_code == 401
         assert "still unauthorized" in excinfo.value.response_body
@@ -148,6 +150,6 @@ def test_oauth_mint_failure_raises_forbidden():
     client = make_oauth_client()
     with rm_module.Mocker() as mock:
         mock.post(TOKEN_URL, status_code=403, text="bad client")
-        with pytest.raises(HttpForbiddenError):
+        with testbase.raises(HttpForbiddenError):
             client.devices.list()
     return

@@ -12,7 +12,9 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
-import pytest
+from ccai import testbase
+
+
 import requests_mock as rm_module
 
 from ccai.errors.exceptions import SemanticError
@@ -51,7 +53,7 @@ def test_mint_authkey_rejects_non_positive_ttl():
         ``mint_authkey`` rejects a non-positive TTL.
     """
     client = make_authkey_client()
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         client.mint_authkey(reusable=False, ephemeral=True, tags=[],
                             ttl_seconds=-1)
     return
@@ -112,7 +114,7 @@ def test_apply_acl_rejects_none():
         ``apply_acl`` rejects a ``None`` document.
     """
     client = make_authkey_client()
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         client.apply_acl(acl_doc=None)
     return
 

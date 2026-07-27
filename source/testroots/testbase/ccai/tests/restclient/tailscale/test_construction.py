@@ -12,7 +12,8 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
-import pytest
+from ccai import testbase
+
 
 from ccai.errors.exceptions import ConfigurationError
 
@@ -64,7 +65,7 @@ def test_construct_with_wrong_credential_raises_configuration_error():
                                      categories=["basic"],
                                      username="user",
                                      password="pass")
-    with pytest.raises(ConfigurationError):
+    with testbase.raises(ConfigurationError):
         TailscaleClient(credential=bad_credential, tailnet="-")
     return
 

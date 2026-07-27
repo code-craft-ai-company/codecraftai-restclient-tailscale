@@ -13,9 +13,11 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
+from ccai import testbase
+
+
 import importlib
 
-import pytest
 
 from ccai.errors.exceptions import SemanticError
 
@@ -71,7 +73,7 @@ def test_typemap_unknown_type_raises():
     """
         An unmapped OpenAPI type raises :class:`SemanticError`.
     """
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         python_type_for_schema(schema={"type": "frobnicate"})
     return
 
@@ -126,7 +128,7 @@ def test_validate_rejects_non_openapi3():
     """
         The validator rejects a document that is not OpenAPI 3.x.
     """
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         validate_openapi_document(document_text="openapi: 2.0\ninfo: {}\n")
     return
 
@@ -135,7 +137,7 @@ def test_validate_rejects_non_mapping():
     """
         The validator rejects a document that is not a mapping.
     """
-    with pytest.raises(SemanticError):
+    with testbase.raises(SemanticError):
         validate_openapi_document(document_text="- just\n- a\n- list\n")
     return
 
