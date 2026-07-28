@@ -79,7 +79,7 @@ This package uses the `unittest` framework. Tests live under
 `source/testroots/testbase/ccai/tests/restclient/tailscale/`. All HTTP traffic in
 tests is mocked via `requests-mock` or `unittest.mock` — no live network calls.
 
-Hypothesis-based property tests are required for: URL composition correctness for nested
+Property-based tests (`ccai.testbase.properties`, NOT hypothesis) are required for: URL composition correctness for nested
 resources, paging cursor semantics, OpenAPI-imported model round-trip
 (`dict → SchemaObject → dict`).
 
@@ -117,3 +117,10 @@ After checkout:
 
 - run `repository-setup/rehome-repository` (creates `.env`)
 - run `development/setup-environment` (creates the venv via Poetry)
+
+Property testing uses `ccai.testbase.properties`, never `hypothesis`. The fleet
+ships its own libraries rather than depending on third-party ones, and
+`hypothesis` was never a declared dependency of this repo — the requirement
+named a package nothing installed. Note that a testbase `@given` cannot run
+under plain `pytest`: it reports the strategy parameters as missing fixtures.
+Run property tests through the testbase runner.
