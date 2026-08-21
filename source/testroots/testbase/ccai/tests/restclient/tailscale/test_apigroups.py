@@ -30,7 +30,7 @@ from ccai.restclient.tailscale.exceptions import (
 from ccai.restclient.tailscale.model.tailscaledevice import TailscaleDevice
 from ccai.restclient.tailscale.model.tailscalekey import TailscaleKey
 
-from ccai.tests.restclient.tailscale.testsupport import (
+from .testsupport import (
     TEST_HOST, TEST_TAILNET, make_authkey_client
 )
 

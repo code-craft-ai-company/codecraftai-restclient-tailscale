@@ -29,7 +29,7 @@ from ccai.restclient.tailscale.apigroups.tailnetsgroup import TailnetsGroup
 from ccai.restclient.tailscale.apigroups.dnsgroup import DnsGroup
 from ccai.restclient.tailscale.apigroups.posturegroup import PostureGroup
 
-from ccai.tests.restclient.tailscale.testsupport import (
+from .testsupport import (
     make_authkey_client, make_oauth_client
 )
 

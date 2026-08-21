@@ -23,7 +23,7 @@ from ccai.restclient.tailscale.exceptions import TailscaleAuthError
 
 from ccai.restclient.tailscale.oauthbearer import OAuthBearer
 
-from ccai.tests.restclient.tailscale.testsupport import (
+from .testsupport import (
     TEST_HOST, TEST_TAILNET, make_oauth_client
 )
 

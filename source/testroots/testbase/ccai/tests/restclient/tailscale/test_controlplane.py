@@ -23,7 +23,7 @@ from ccai.interfaces.ivpncontrolplane import VPNDeviceRecord
 
 from ccai.restclient.tailscale.model.tailscaledevice import TailscaleDevice
 
-from ccai.tests.restclient.tailscale.testsupport import (
+from .testsupport import (
     TEST_HOST, TEST_TAILNET, make_authkey_client
 )
 
