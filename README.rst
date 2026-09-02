@@ -2,7 +2,7 @@
 Code Craft AI RestClient - Tailscale
 =====================================
 
-The ``codecraftai-restclient-tailscale`` package is a typed, aspect-driven REST client for the Tailscale public API (``api.tailscale.com/api/v2/``). It is built on top of ``codecraftai-restclient-base`` and consumes credentials from ``codecraftai-credentials`` (``TailscaleAuthKeyCredential``, ``TailscaleOAuthCredential``). The package implements the ``IVPNControlPlane`` Protocol declared in ``codecraftai-interfaces``, so any consumer that expects a control-plane today can substitute this client transparently.
+The ``codecraftai-restclient-tailscale`` package is a typed, aspect-driven REST client for the Tailscale public API (``api.tailscale.com/api/v2/``). It is built on top of ``codecraftai-restclient-base`` and consumes credentials from ``codecraftai-credentials`` (``TailscaleAuthKeyCredential``, ``TailscaleOAuthCredential``). The package implements the ``IVPNControlPlane`` Protocol declared in ``codecraftai-foundations``, so any consumer that expects a control-plane today can substitute this client transparently.
 
 The implementation landed in Milestone M3b of the VPN/cloud-provisioning plan. See the ``specs/`` folder for the Kiro-style requirements, design, and task documentation that drove that work.
 
