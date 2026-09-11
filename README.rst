@@ -60,7 +60,7 @@ Tests land in Milestone M3b. Once source code is in place:
 .. code-block:: bash
 
    source .venv/bin/activate
-   PYTHONPATH=source/packages:source/testroots/testbase python -m pytest source/testroots -q
+   testbase testing run --root ./source/testroots/testbase --includes=testbase.ccai.tests
 
 Standards and Conventions
 =========================
