@@ -13,6 +13,7 @@ __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
 
+import ast
 import os
 
 from typing import Any, Dict, List, Tuple
@@ -36,13 +37,18 @@ __author__ = "Myron Walker"
 __copyright__ = "Copyright 2025, Code Craft AI LLC"
 __credits__ = []
 
-
-from datetime import datetime
-from typing import Any, Dict, List, Optional
-
-from ccai.restclient.base.schemaobject import SchemaObject
-from ccai.restclient.base.schemafield import Field
 '''
+
+# The import statements a generated model module may need, in the order they are emitted.  Each entry is the
+# module name and the names that can be imported from it.  An empty entry marks the break between the standard
+# library group and the ccai group.
+MODEL_IMPORT_CANDIDATES = [
+    ("datetime", ["datetime"]),
+    ("typing", ["Any", "Dict", "List", "Optional"]),
+    None,
+    ("ccai.restclient.base.schemaobject", ["SchemaObject"]),
+    ("ccai.restclient.base.schemafield", ["Field"]),
+]
 
 
 def class_name_for_schema(*, schema_name: str) -> str:
@@ -109,6 +115,44 @@ def _emit_field_line(*, field_name: str, field_schema: Dict[str, Any],
     return rtnval
 
 
+def _emit_import_lines(*, body_text: str) -> List[str]:
+    """
+        Emit the import statements for a generated model module, limited to the names the module body references.
+
+        :param body_text: The generated class source.
+
+        :returns: The import lines, with a blank line between the standard library and ccai groups.
+    """
+    referenced_names = set()
+    tree = ast.parse(body_text)
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Name):
+            referenced_names.add(node.id)
+
+    groups: List[List[str]] = [[]]
+    for candidate in MODEL_IMPORT_CANDIDATES:
+        if candidate is None:
+            groups.append([])
+            continue
+        module_name, names = candidate
+        used_names = []
+        for name in names:
+            if name in referenced_names:
+                used_names.append(name)
+        if len(used_names) > 0:
+            groups[-1].append("from {} import {}".format(module_name, ", ".join(used_names)))
+
+    lines: List[str] = []
+    for group in groups:
+        if len(group) == 0:
+            continue
+        if len(lines) > 0:
+            lines.append("")
+        lines.extend(group)
+
+    return lines
+
+
 def emit_schema_module(*, schema_name: str,
                         schema: Dict[str, Any]) -> Tuple[str, str, str]:
     """
@@ -122,10 +166,8 @@ def emit_schema_module(*, schema_name: str,
     class_name = class_name_for_schema(schema_name=schema_name)
     module_name = module_name_for_class(class_name=class_name)
 
+    # The class body is generated first so the imports can be limited to the names it references.
     lines: List[str] = []
-    lines.append(GENERATED_HEADER.format(module_name=module_name))
-    lines.append("")
-    lines.append("")
     lines.append("class {}(SchemaObject):".format(class_name))
 
     description = schema.get("description")
@@ -162,7 +204,17 @@ def emit_schema_module(*, schema_name: str,
             lines.append(field_line)
 
     lines.append("")
-    source_text = os.linesep.join(lines)
+    body_text = os.linesep.join(lines)
+
+    header_lines: List[str] = []
+    header_lines.append(GENERATED_HEADER.format(module_name=module_name))
+    header_lines.extend(_emit_import_lines(body_text=body_text))
+    header_lines.append("")
+    header_lines.append("")
+    header_lines.append("")
+    header_lines.append("")
+
+    source_text = os.linesep.join(header_lines) + body_text
     rtnval = (class_name, module_name, source_text)
     return rtnval
 
