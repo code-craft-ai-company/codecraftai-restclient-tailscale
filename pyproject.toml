@@ -27,6 +27,10 @@ dependencies = [
     "codecraftai-testbase<2.0.0",
 ]
 
+[project.urls]
+Repository = "https://github.com/code-craft-ai-company/codecraftai-restclient-tailscale"
+Issues = "https://github.com/code-craft-ai-company/codecraftai-restclient-tailscale/issues"
+
 [dependency-groups]
 dev = [
     "requests-mock>=1.11.0",
